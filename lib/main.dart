@@ -21,10 +21,9 @@ class MyApp extends StatelessWidget {
             }
             break;
           default:
+            // Default route if nothing else matches
             return _createFadeRoute(page: NotFoundPage(), settings: settings);  // Apply fade transition to NotFoundPage as well
         }
-        // Default route if nothing else matches
-        return _createFadeRoute(page: NotFoundPage(), settings: settings);
       },
     );
   }
