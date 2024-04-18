@@ -7,15 +7,12 @@ class ImagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Full Screen Image')),
-      body: GestureDetector(
+    return GestureDetector(
         onTap: () => Navigator.of(context).pop(),
         child: Center(
           child: Image.network(args.imageUrl, fit: BoxFit.cover),
         ),
-      ),
-    );
+      );
   }
 }
 
