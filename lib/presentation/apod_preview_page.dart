@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:test_assignment_nasa/nasa_service.dart';
+import 'package:test_assignment_nasa/presentation/image_page.dart';
 
-class APODPreview extends StatefulWidget {
-  const APODPreview({super.key});
+class APODPreviewPage extends StatefulWidget {
+  const APODPreviewPage({super.key});
 
   @override
-  createState() => _APODPreviewState();
+  createState() => _APODPreviewPageState();
 }
 
-class _APODPreviewState extends State<APODPreview> {
+class _APODPreviewPageState extends State<APODPreviewPage> {
   final NasaService _nasaService = NasaService();
   final GlobalKey _imageKey = GlobalKey();
   double _imageWidth = 0;
@@ -32,29 +33,34 @@ class _APODPreviewState extends State<APODPreview> {
             if (snapshot.hasError) {
               return Center(child: Text("Error: ${snapshot.error}"));
             }
-            var imgUrl = snapshot.data?['url'];
-            if (imgUrl != null) {
+            var imageUrl = snapshot.data?['url'];
+            if (imageUrl != null) {
               return Center(
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Image.network(
-                        imgUrl,
-                        key: _imageKey,
-                        height: MediaQuery.of(context).size.height / 2,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Text('Image not available');
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/image', arguments: ImagePageArgs(imageUrl: imageUrl) );
                         },
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            setScaledImageWidth();
-                            return child;
-                          }
-                          return Center(child: CircularProgressIndicator());
-                        },
+                        child: Image.network(
+                          imageUrl,
+                          key: _imageKey,
+                          height: MediaQuery.of(context).size.height / 2,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Text('Image not available');
+                          },
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              setScaledImageWidth();
+                              return child;
+                            }
+                            return Center(child: CircularProgressIndicator());
+                          },
+                        ),
                       ),
                       Container(
                         width: _imageWidth == 0 ? MediaQuery.of(context).size.width / 2 : _imageWidth,
