@@ -30,27 +30,42 @@ class _APODPreviewState extends State<APODPreview> {
             if (snapshot.hasError) {
               return Center(child: Text("Error: ${snapshot.error}"));
             }
-            var imgUrl = snapshot.data?['hdurl'];
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(snapshot.data?['title'] ?? 'No Title Available'),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(
-                      imgUrl ,
-                      errorBuilder: (context, error, stackTrace) {
-                        print('Error loading image: $error. StackTrace: $stackTrace');
-                        return Text('Image not available');
-                      },
-                    ),
+            var imgUrl = snapshot.data?['url'];
+            if (imgUrl != null) {
+              return Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        snapshot.data?['title'] ?? 'No Title Available',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Image.network(
+                        imgUrl,
+                        height: MediaQuery.of(context).size.height / 2,
+                        fit: BoxFit.fitHeight,
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Error loading image: $error. StackTrace: $stackTrace');
+                          return Text('Image not available');
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(snapshot.data?['explanation'] ??
+                            'No Description Available'),
+                      ),
+                    ],
                   ),
-                  Text(snapshot.data?['explanation'] ??
-                      'No Description Available'),
-                ],
-              ),
-            );
+                ),
+              );
+            } else {
+              return Center(child: Text("No image URL provided"));
+            }
           } else {
             return Center(child: CircularProgressIndicator());
           }
