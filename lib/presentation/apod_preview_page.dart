@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_assignment_nasa/nasa_service.dart';
+import 'package:test_assignment_nasa/services/nasa_service.dart';
 import 'package:test_assignment_nasa/presentation/image_page.dart';
 
 class APODPreviewPage extends StatefulWidget {
@@ -19,7 +19,11 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
   @override
   void initState() {
     super.initState();
-    _apodData = _nasaService.fetchAPOD();
+    try {
+      _apodData = _nasaService.fetchAPOD();
+    } catch (e) {
+      // TODO: handle exception
+    }
   }
 
   @override
