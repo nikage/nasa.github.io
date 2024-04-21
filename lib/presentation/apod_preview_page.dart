@@ -27,17 +27,10 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
 
   void _fetchAPOD() {
     // TODO: let user choose the date
-    final yesterday = NasaDate.fromDateTime(
-      DateTime.now().subtract(const Duration(days: 1)),
-    );
+    const testDate = String.fromEnvironment('APOD_TEST_DATE');
+    final date = testDate != null ? NasaDate.fromString(testDate) : null;
 
-    _apodData = _nasaService
-        .fetchAPOD(
-      /// Enable for testing as needed,
-      /// TODO: use --dart-define=TEST_DATE=2022-01-01 to set the date
-      // date: yesterday,
-    )
-        .catchError((e) {
+    _apodData = _nasaService.fetchAPOD(date: date).catchError((e) {
       // TODO: make user friendly message
       ToastService().error(e.toString());
     });

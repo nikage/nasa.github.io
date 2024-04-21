@@ -68,6 +68,16 @@ class NasaDate {
     );
   }
 
+  factory NasaDate.fromString(String date) {
+    final parts = date.split('-');
+    // TODO: add validation
+    return NasaDate(
+      year: int.parse(parts[0]),
+      month: int.parse(parts[1]),
+      day: int.parse(parts[2]),
+    );
+  }
+
   @override
   String toString() {
     return value;
