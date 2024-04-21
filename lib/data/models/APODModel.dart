@@ -15,6 +15,10 @@ class APODModel {
     required this.url,
   });
 
+  bool get isImage => mediaType == 'image';
+
+  bool get isVideo => mediaType == 'video';
+
   factory APODModel.fromJson(Map<String, dynamic> json) {
     return APODModel(
       date: json['date'],

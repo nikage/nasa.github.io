@@ -3,6 +3,7 @@ import 'package:test_assignment_nasa/data/models/APODModel.dart';
 import 'package:test_assignment_nasa/services/nasa_service.dart';
 import 'package:test_assignment_nasa/presentation/image_page.dart';
 import 'package:test_assignment_nasa/services/toast_service.dart';
+import 'dart:html' as html;
 
 class APODPreviewPage extends StatefulWidget {
   const APODPreviewPage({super.key});
@@ -55,11 +56,20 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
           if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
-
-          _imageUrl = snapshot.data?.url;
+          final data = snapshot.data!;
+          _imageUrl = data.url;
 
           if (_imageUrl == null) {
             return Center(child: Text("No image URL provided"));
+          }
+
+          if (data.isImage == false) {
+            return Center(child: Column(
+              children: [
+                Text("Media type is not supported yet."),
+                _buildExternalLink(data.url),
+              ],
+            ));
           }
           return Center(
             child: SingleChildScrollView(
@@ -121,6 +131,23 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildExternalLink(String url) {
+    onTap() {
+      html.window.open(url, 'NASA APOD');
+    }
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Text(
+          url,
+          style: const TextStyle(
+              color: Colors.blue, decoration: TextDecoration.underline),
+        ),
       ),
     );
   }
