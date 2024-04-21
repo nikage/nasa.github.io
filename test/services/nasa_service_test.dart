@@ -34,4 +34,17 @@ void main() {
       expect(apod.explanation, isNotNull);
     });
   });
+
+  test('fetchAPODRange', () async {
+    APODModels res = await nasaService.fetchAPODRange(
+      startDate: NasaDate.fromDateTime(DateTime(2021, 10, 10)),
+      endDate: NasaDate.fromDateTime(DateTime(2021, 10, 15)),
+    );
+    expect(res.length, 6);
+    res.forEach((apod) {
+      expect(apod.title, isNotNull);
+      expect(apod.url, isNotNull);
+      expect(apod.explanation, isNotNull);
+    });
+  });
 }

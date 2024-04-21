@@ -31,6 +31,18 @@ class NasaService {
       rethrow;
     }
   }
+  Future<APODModels> fetchAPODRange({required NasaDate startDate, required NasaDate endDate}) async {
+    String url = '/planetary/apod?start_date=$startDate&end_date=$endDate&api_key=$apiKey';
+
+    try {
+      final response = await _httpService.get(url);
+      return response.map<APODModel>((json) => APODModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
 }
 
 class NasaDate {
@@ -54,5 +66,10 @@ class NasaDate {
       month: dateTime.month,
       day: dateTime.day,
     );
+  }
+
+  @override
+  String toString() {
+    return value;
   }
 }
