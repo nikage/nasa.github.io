@@ -19,6 +19,18 @@ class NasaService {
       rethrow;
     }
   }
+  Future<APODModels> fetchAPODRandom({required int count}) async {
+    /// count: number of random APOD images to fetch
+    /// See: https://api.nasa.gov/?search=APOD
+    String url = '/planetary/apod?count=${count}&api_key=$apiKey';
+
+    try {
+      final response = await _httpService.get(url);
+      return response.map<APODModel>((json) => APODModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class NasaDate {

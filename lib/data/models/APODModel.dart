@@ -1,3 +1,5 @@
+typedef APODModels = List<APODModel>;
+
 class APODModel {
   final String date;
   final String explanation;
