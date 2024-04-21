@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_assignment_nasa/data/models/APODModel.dart';
 import 'package:test_assignment_nasa/services/nasa_service.dart';
 import 'package:test_assignment_nasa/presentation/image_page.dart';
 import 'package:test_assignment_nasa/services/toast_service.dart';
@@ -15,7 +16,7 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
   final GlobalKey _globalKey = GlobalKey();
   double _imageWidth = 0;
 
-  Future<Map<String, dynamic>>? _apodData;
+  Future<APODModel>? _apodData;
 
   @override
   void initState() {
@@ -45,14 +46,14 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('NASA APOD')),
-      body: FutureBuilder<Map<String, dynamic>>(
+      body: FutureBuilder<APODModel>(
         future: _apodData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return Center(child: Text("Error: ${snapshot.error}"));
             }
-            var imageUrl = snapshot.data?['url'];
+            var imageUrl = snapshot.data?.url;
             if (imageUrl != null) {
               return Center(
                 child: SingleChildScrollView(
@@ -85,7 +86,7 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
                         width: _imageWidth == 0 ? MediaQuery.of(context).size.width / 2 : _imageWidth,
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          snapshot.data?['title'] ??
+                          snapshot.data?.title ??
                               'No Title Available',
                           textAlign: TextAlign.center,
                           softWrap: true,
@@ -97,7 +98,7 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(snapshot.data?['explanation'] ?? 'No Description Available'),
+                        child: Text(snapshot.data?.explanation ?? 'No Description Available'),
                       ),
                     ],
                   ),

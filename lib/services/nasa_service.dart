@@ -1,3 +1,4 @@
+import 'package:test_assignment_nasa/data/models/APODModel.dart';
 import 'package:test_assignment_nasa/services/http_service.dart';
 
 class NasaService {
@@ -7,10 +8,16 @@ class NasaService {
     baseUrl: 'https://api.nasa.gov',
   );
 
-  Future<Map<String, dynamic>> fetchAPOD({NasaDate? date}) async {
+  Future<APODModel> fetchAPOD({NasaDate? date}) async {
     // TODO: use interceptor or middleware to add the api_key to the request
     String url = '/planetary/apod?date=${date?.value ?? ''}&api_key=$apiKey';
-    return await _httpService.get(url);
+
+    try {
+      final response = await _httpService.get(url);
+      return APODModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 
