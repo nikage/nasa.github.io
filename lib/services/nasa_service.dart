@@ -7,10 +7,33 @@ class NasaService {
     baseUrl: 'https://api.nasa.gov',
   );
 
-  Future<Map<String, dynamic>> fetchAPOD() async {
+  Future<Map<String, dynamic>> fetchAPOD({NasaDate? date}) async {
     // TODO: use interceptor or middleware to add the api_key to the request
-    String url = '/planetary/apod?api_key=$apiKey';
+    String url = '/planetary/apod?date=${date?.value ?? ''}&api_key=$apiKey';
     return await _httpService.get(url);
   }
 }
 
+class NasaDate {
+  final int year;
+  final int month;
+  final int day;
+
+  NasaDate({
+    required this.year,
+    required this.month,
+    required this.day,
+  });
+
+  String get value {
+    return '$year-$month-$day';
+  }
+
+  factory NasaDate.fromDateTime(DateTime dateTime) {
+    return NasaDate(
+      year: dateTime.year,
+      month: dateTime.month,
+      day: dateTime.day,
+    );
+  }
+}
