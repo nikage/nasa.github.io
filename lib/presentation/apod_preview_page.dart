@@ -12,7 +12,7 @@ class APODPreviewPage extends StatefulWidget {
 
 class _APODPreviewPageState extends State<APODPreviewPage> {
   final NasaService _nasaService = NasaService();
-  final GlobalKey _imageKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
   double _imageWidth = 0;
 
   Future<Map<String, dynamic>>? _apodData;
@@ -24,7 +24,18 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
   }
 
   void _fetchAPOD() {
-    _apodData = _nasaService.fetchAPOD().catchError((e) {
+    // TODO: let user choose the date
+    final yesterday = NasaDate.fromDateTime(
+      DateTime.now().subtract(const Duration(days: 1)),
+    );
+
+    _apodData = _nasaService
+        .fetchAPOD(
+      /// Enable for testing as needed,
+      /// TODO: use --dart-define=TEST_DATE=2022-01-01 to set the date
+      // date: yesterday,
+    )
+        .catchError((e) {
       // TODO: make user friendly message
       ToastService().error(e.toString());
     });
@@ -55,7 +66,7 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
                         },
                         child: Image.network(
                           imageUrl,
-                          key: _imageKey,
+                          key: _globalKey,
                           height: MediaQuery.of(context).size.height / 2,
                           fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
@@ -105,7 +116,7 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
 
   void setScaledImageWidth() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox? box = _imageKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? box = _globalKey.currentContext?.findRenderObject() as RenderBox?;
       if (box != null && _imageWidth != box.size.width) {
         setState(() {
           _imageWidth = box.size.width;
