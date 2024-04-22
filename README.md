@@ -13,6 +13,6 @@ https://nikage.github.io/nasa-beta.github.io
     
 ## Deployment
 
-1. Clone git@github.com:nikage/nasa-beta.github.io.git
-2. Run `flutter build web --release`
+1. `git clone git@github.com:nikage/nasa-beta.github.io.git`
+2. `flutter build web --release`
 3. `git push origin main`
