@@ -27,8 +27,8 @@ class _APODPreviewPageState extends State<APODPreviewPage> {
 
   void _fetchAPOD() {
     // TODO: let user choose the date
-    const testDate = String.fromEnvironment('APOD_TEST_DATE');
-    final date = testDate != null ? NasaDate.fromString(testDate) : null;
+    const String testDate = String.fromEnvironment('APOD_TEST_DATE', defaultValue: "" );
+    final date = testDate != '' ? NasaDate.fromString(testDate) : null;
 
     _apodData = _nasaService.fetchAPOD(date: date).catchError((e) {
       // TODO: make user friendly message
